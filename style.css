@@ -31,6 +31,7 @@ a {
   color: inherit;
 }
 
+
 /* =========================
    HEADER
 ========================= */
@@ -79,6 +80,7 @@ nav a.active {
   color: #fff;
 }
 
+
 /* =========================
    GENERAL
 ========================= */
@@ -119,6 +121,7 @@ nav a.active {
   font-size: 1.1rem;
 }
 
+
 /* =========================
    HOME HERO
 ========================= */
@@ -156,6 +159,7 @@ nav a.active {
   letter-spacing: 0.2em;
 }
 
+
 /* =========================
    BUTTONS
 ========================= */
@@ -173,12 +177,18 @@ nav a.active {
   border: 1px solid #7c5cff;
   border-radius: 10px;
   font-weight: 900;
+  cursor: pointer;
+}
+
+.btn:hover {
+  filter: brightness(1.08);
 }
 
 .btn.ghost {
   background: #ffffff08;
   border-color: #ffffff14;
 }
+
 
 /* =========================
    CARDS / PANELS / VIDEOS
@@ -228,6 +238,7 @@ nav a.active {
   color: #9ca4b5;
 }
 
+
 /* =========================
    RIVALS SETTINGS
 ========================= */
@@ -264,6 +275,7 @@ nav a.active {
   border: 1px solid #26d9ff22;
   border-radius: 12px;
 }
+
 
 /* =========================
    VIDEOS
@@ -307,6 +319,7 @@ nav a.active {
   font-weight: 800;
 }
 
+
 /* =========================
    ABOUT
 ========================= */
@@ -318,6 +331,7 @@ nav a.active {
 .about .lead {
   margin: 0 auto 30px;
 }
+
 
 /* =========================
    CLAN MEMBERS
@@ -344,6 +358,7 @@ nav a.active {
   margin: 0 auto 40px;
 }
 
+
 /* =========================
    MEMBER GRID
 ========================= */
@@ -354,6 +369,7 @@ nav a.active {
   gap: 22px;
   margin-top: 40px;
 }
+
 
 /* =========================
    MEMBER CARD
@@ -377,6 +393,7 @@ nav a.active {
   border-color: #7c5cff35;
 }
 
+
 /* =========================
    MEMBER PHOTO
 ========================= */
@@ -398,6 +415,7 @@ nav a.active {
   display: block;
 }
 
+
 /* =========================
    MEMBER INFO
 ========================= */
@@ -415,6 +433,7 @@ nav a.active {
   color: #9ca4b5;
   margin: 0;
 }
+
 
 /* =========================
    MEMBER ROLES
@@ -439,162 +458,9 @@ nav a.active {
   color: #9ca4b5;
 }
 
-/* =========================
-   TRYOUT TEAMS
-========================= */
-
-.tryout-section {
-  margin-top: 90px;
-}
-
-.tryout-box {
-  max-width: 750px;
-  margin: 40px auto 0;
-  padding: 40px 25px;
-  background: linear-gradient(145deg, #151927, #090b11);
-  border: 1px solid #ffffff12;
-  border-radius: 20px;
-  box-shadow: 0 18px 50px #0005;
-}
-
-.tryout-box h3 {
-  margin-top: 0;
-  font-size: 1.8rem;
-}
-
-.tryout-box p {
-  color: #9ca4b5;
-  margin-bottom: 25px;
-}
 
 /* =========================
-   DISCORD SECTION
-========================= */
-
-.discord-join {
-  max-width: 900px;
-  margin: 50px auto 0;
-  padding: 45px 30px;
-  text-align: center;
-  background: linear-gradient(145deg, #151927, #090b11);
-  border: 1px solid #ffffff12;
-  border-radius: 20px;
-  box-shadow: 0 18px 50px #0005;
-}
-
-.discord-join h2 {
-  margin: 0 0 10px;
-  font-size: 2rem;
-}
-
-.discord-join p {
-  color: #9ca4b5;
-  margin: 0 0 25px;
-}
-
-/* =========================
-   FOOTER
-========================= */
-
-footer {
-  padding: 30px 7%;
-  border-top: 1px solid #ffffff12;
-  color: #9ca4b5;
-  text-align: center;
-}
-
-/* =========================
-   TABLET
-========================= */
-
-@media (max-width: 800px) {
-
-  header {
-    padding: 0 5%;
-  }
-
-  nav {
-    gap: 0;
-  }
-
-  nav a {
-    font-size: 0.8rem;
-    padding: 8px;
-  }
-
-  .hero {
-    grid-template-columns: 1fr;
-    padding-top: 60px;
-  }
-
-  .hero-box {
-    height: 280px;
-  }
-
-  .cards,
-  .grid,
-  .member-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .buttons {
-    flex-direction: column;
-  }
-
-  .btn {
-    text-align: center;
-  }
-
-  .page {
-    padding-top: 60px;
-  }
-
-  .member-photo {
-    height: 300px;
-  }
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 520px) {
-
-  nav {
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-
-  header {
-    height: auto;
-    min-height: 76px;
-    padding: 12px 5%;
-    gap: 10px;
-  }
-
-  .logo {
-    font-size: 1rem;
-  }
-
-  nav a {
-    font-size: 0.72rem;
-    padding: 6px;
-  }
-
-  .hero h1 {
-    font-size: 3.2rem;
-  }
-
-  .member-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .panel div {
-    flex-wrap: wrap;
-  }
-}
-/* =========================
-   TRYOUTS PAGE
+   TRYOUTS
 ========================= */
 
 .tryout-section {
@@ -615,6 +481,11 @@ footer {
 .host-title span {
   color: #7c5cff;
 }
+
+
+/* =========================
+   TRYOUT REQUIREMENTS
+========================= */
 
 .tryout-requirements {
   display: grid;
@@ -657,11 +528,10 @@ footer {
   border-color: #7c5cff35;
 }
 
-.section-lead {
-  color: #9ca4b5;
-  max-width: 650px;
-  margin: 0 auto 35px;
-}
+
+/* =========================
+   TRYOUT HOSTS
+========================= */
 
 .host-title {
   margin-top: 80px;
@@ -718,6 +588,11 @@ footer {
   color: #9ca4b5;
 }
 
+
+/* =========================
+   TRYOUT ACTION
+========================= */
+
 .tryout-action {
   margin: 75px auto 0;
   max-width: 800px;
@@ -743,14 +618,394 @@ footer {
   margin-bottom: 25px;
 }
 
+
+/* =========================
+   VIP TRYOUT SERVERS
+========================= */
+
+.vip-servers {
+  margin-top: 80px;
+  text-align: center;
+}
+
+.vip-servers h2 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  margin: 15px 0;
+}
+
+.vip-servers h2 span {
+  color: #7c5cff;
+}
+
+.vip-server-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-top: 40px;
+}
+
+.vip-server-card {
+  padding: 30px;
+  background: #0e1119;
+  border: 1px solid #ffffff12;
+  border-radius: 18px;
+  box-shadow: 0 18px 50px #0005;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.vip-server-card:hover {
+  transform: translateY(-5px);
+  border-color: #7c5cff66;
+}
+
+.vip-server-card h3 {
+  font-size: 1.5rem;
+  margin: 10px 0 5px;
+}
+
+.vip-server-card p {
+  color: #9ca4b5;
+}
+
+.vip-server-status {
+  color: #26d9ff;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.vip-server-status.ended {
+  color: #ff6b6b;
+}
+
+.server-disabled {
+  display: inline-block;
+  padding: 13px 20px;
+  background: #ffffff08;
+  border: 1px solid #ffffff12;
+  border-radius: 10px;
+  color: #777f90;
+  font-weight: 800;
+}
+
+
+/* =========================
+   DISCORD
+========================= */
+
+.discord-join {
+  max-width: 900px;
+  margin: 50px auto 0;
+  padding: 45px 30px;
+  text-align: center;
+  background: linear-gradient(145deg, #151927, #090b11);
+  border: 1px solid #ffffff12;
+  border-radius: 20px;
+  box-shadow: 0 18px 50px #0005;
+}
+
+.discord-join h2 {
+  margin: 0 0 10px;
+  font-size: 2rem;
+}
+
+.discord-join p {
+  color: #9ca4b5;
+  margin: 0 0 25px;
+}
+
+
+/* =========================
+   STAFF PANEL
+========================= */
+
+.staff-login,
+.staff-dashboard {
+  max-width: 1000px;
+  margin: auto;
+}
+
+
+/* LOGIN */
+
+.login-box {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 35px;
+  background: #0e1119;
+  border: 1px solid #ffffff12;
+  border-radius: 18px;
+  box-shadow: 0 18px 50px #0005;
+}
+
+.login-box label,
+.staff-box label {
+  display: block;
+  margin-bottom: 8px;
+  color: #cbd1df;
+  font-weight: 700;
+}
+
+input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  background: #07080d;
+  color: #fff;
+  border: 1px solid #ffffff16;
+  border-radius: 10px;
+  outline: none;
+  font: inherit;
+}
+
+input:focus {
+  border-color: #7c5cff;
+}
+
+.login-box .btn {
+  width: 100%;
+}
+
+#loginMessage {
+  margin-top: 15px;
+  color: #ff6b6b;
+  text-align: center;
+}
+
+
+/* STAFF DASHBOARD */
+
+.staff-dashboard {
+  padding-bottom: 60px;
+}
+
+.staff-box {
+  margin: 35px 0;
+  padding: 30px;
+  background: #0e1119;
+  border: 1px solid #ffffff12;
+  border-radius: 18px;
+  box-shadow: 0 18px 50px #0005;
+}
+
+.staff-box h2 {
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+.staff-box h2 span {
+  color: #7c5cff;
+}
+
+
+/* STAFF SERVER CARD */
+
+.server-admin-card {
+  padding: 22px;
+  margin-top: 18px;
+  background: #090b11;
+  border: 1px solid #ffffff12;
+  border-radius: 14px;
+}
+
+.server-admin-card h3 {
+  margin: 0 0 8px;
+}
+
+.server-admin-card p {
+  color: #9ca4b5;
+}
+
+.server-status {
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  margin-bottom: 15px;
+}
+
+.status-active {
+  color: #26d9ff;
+}
+
+.status-ended {
+  color: #ff6b6b;
+}
+
+.server-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.server-actions button {
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+}
+
+.btn-small {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #7c5cff;
+  color: #fff;
+}
+
+.btn-danger {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #3a1418;
+  color: #ff7a7a;
+}
+
+.btn-start {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #12343b;
+  color: #26d9ff;
+}
+
+.btn-ended {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #2b1417;
+  color: #ff6b6b;
+}
+
+.empty-servers {
+  color: #9ca4b5;
+  text-align: center;
+  padding: 20px;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+  padding: 30px 7%;
+  border-top: 1px solid #ffffff12;
+  color: #9ca4b5;
+  text-align: center;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
 @media (max-width: 800px) {
+
+  header {
+    padding: 0 5%;
+  }
+
+  nav {
+    gap: 0;
+  }
+
+  nav a {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    padding-top: 60px;
+  }
+
+  .hero-box {
+    height: 280px;
+  }
+
+  .cards,
+  .grid,
+  .member-grid,
+  .host-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  .btn {
+    text-align: center;
+  }
+
+  .page {
+    padding-top: 60px;
+  }
+
+  .member-photo {
+    height: 300px;
+  }
 
   .tryout-requirements {
     grid-template-columns: 1fr;
   }
 
-  .host-grid {
+  .vip-server-grid {
     grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 520px) {
+
+  nav {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  header {
+    height: auto;
+    min-height: 76px;
+    padding: 12px 5%;
+    gap: 10px;
+  }
+
+  .logo {
+    font-size: 1rem;
+  }
+
+  nav a {
+    font-size: 0.72rem;
+    padding: 6px;
+  }
+
+  .hero h1 {
+    font-size: 3.2rem;
+  }
+
+  .member-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel div {
+    flex-wrap: wrap;
+  }
+
+  .login-box,
+  .staff-box {
+    padding: 22px;
+  }
+
+  .server-actions {
+    flex-direction: column;
+  }
+
+  .server-actions button {
+    width: 100%;
   }
 
 }
