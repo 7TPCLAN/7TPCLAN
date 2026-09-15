@@ -593,3 +593,164 @@ footer {
     flex-wrap: wrap;
   }
 }
+/* =========================
+   TRYOUTS PAGE
+========================= */
+
+.tryout-section {
+  max-width: 1100px;
+  margin: 60px auto 0;
+  padding-bottom: 50px;
+}
+
+.tryout-section > h2,
+.host-title {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  margin: 50px 0 25px;
+}
+
+.tryout-section h2 span,
+.host-title span {
+  color: #7c5cff;
+}
+
+.tryout-requirements {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.requirement {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 25px;
+  background: #0e1119;
+  border: 1px solid #ffffff12;
+  border-radius: 18px;
+  box-shadow: 0 18px 50px #0005;
+}
+
+.requirement-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.requirement h3 {
+  margin: 0 0 5px;
+  font-size: 1.4rem;
+}
+
+.requirement h3 span {
+  color: #9ca4b5;
+  font-size: 0.8rem;
+}
+
+.requirement p {
+  margin: 0;
+  color: #9ca4b5;
+}
+
+.requirement.optional {
+  border-color: #7c5cff35;
+}
+
+.section-lead {
+  color: #9ca4b5;
+  max-width: 650px;
+  margin: 0 auto 35px;
+}
+
+.host-title {
+  margin-top: 80px;
+  text-align: center;
+}
+
+.host-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.host-card {
+  padding: 25px;
+  text-align: center;
+  background: #0e1119;
+  border: 1px solid #ffffff12;
+  border-radius: 18px;
+  box-shadow: 0 18px 50px #0005;
+  transition: 0.2s;
+}
+
+.host-card:hover {
+  transform: translateY(-5px);
+  border-color: #7c5cff66;
+}
+
+.host-card h3 {
+  margin: 5px 0;
+  font-size: 1.35rem;
+}
+
+.host-card p:last-child {
+  color: #9ca4b5;
+  margin: 0;
+}
+
+.host-role {
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  margin: 0;
+}
+
+.host-role.leader {
+  color: #26d9ff;
+}
+
+.host-role.vice {
+  color: #7c5cff;
+}
+
+.host-role.command {
+  color: #9ca4b5;
+}
+
+.tryout-action {
+  margin: 75px auto 0;
+  max-width: 800px;
+  padding: 45px 30px;
+  text-align: center;
+  background: linear-gradient(145deg, #151927, #090b11);
+  border: 1px solid #ffffff12;
+  border-radius: 20px;
+  box-shadow: 0 18px 50px #0005;
+}
+
+.tryout-action h2 {
+  margin: 0 0 10px;
+  font-size: 2.2rem;
+}
+
+.tryout-action h2 span {
+  color: #7c5cff;
+}
+
+.tryout-action p {
+  color: #9ca4b5;
+  margin-bottom: 25px;
+}
+
+@media (max-width: 800px) {
+
+  .tryout-requirements {
+    grid-template-columns: 1fr;
+  }
+
+  .host-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
