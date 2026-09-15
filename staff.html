@@ -2,48 +2,101 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1.0">
+
   <title>Staff Panel | 7TPclan</title>
-  <link rel="stylesheet" href="style.css">
+
+  <link
+    rel="stylesheet"
+    href="style.css">
+
 </head>
 
 <body>
 
 <header>
-  <a class="logo" href="index.html">7TP <span>CLAN</span></a>
+
+  <a
+    class="logo"
+    href="index.html">
+    7TP <span>CLAN</span>
+  </a>
 
   <nav>
-    <a href="index.html">Home</a>
-    <a href="tryouts.html">Tryouts</a>
+
+    <a href="index.html">
+      Home
+    </a>
+
+    <a href="rivals.html">
+      Rivals
+    </a>
+
+    <a href="tryouts.html">
+      Tryouts
+    </a>
+
+    <a href="minecraft.html">
+      Minecraft PvP
+    </a>
+
+    <a href="videos.html">
+      Videos
+    </a>
+
+    <a href="about.html">
+      About
+    </a>
+
   </nav>
+
 </header>
+
 
 <main class="page">
 
-  <section id="loginSection" class="staff-login">
 
-    <p class="eyebrow">STAFF ACCESS</p>
+  <!-- LOGIN -->
+
+  <section
+    id="loginSection"
+    class="staff-login">
+
+    <p class="eyebrow">
+      STAFF ACCESS
+    </p>
 
     <h1>
       Staff <span>Panel</span>
     </h1>
 
     <p class="lead">
-      Sign in with your Tryout Staff account to manage VIP servers.
+      Log in with your 7TPclan staff username and password.
     </p>
+
 
     <div class="login-box">
 
-      <label for="staffEmail">Staff Email</label>
+
+      <label for="staffUsername">
+        Username
+      </label>
 
       <input
-        type="email"
-        id="staffEmail"
+        type="text"
+        id="staffUsername"
         autocomplete="username"
-        placeholder="staff@example.com">
+        placeholder="Enter username">
 
-      <label for="staffPassword">Password</label>
+
+      <label for="staffPassword">
+        Password
+      </label>
 
       <input
         type="password"
@@ -51,9 +104,16 @@
         autocomplete="current-password"
         placeholder="Enter password">
 
-      <button class="btn" id="loginButton">
+
+      <button
+        class="btn"
+        id="loginButton"
+        type="button">
+
         🔐 Login
+
       </button>
+
 
       <p id="loginMessage"></p>
 
@@ -62,19 +122,30 @@
   </section>
 
 
+
+  <!-- DASHBOARD -->
+
   <section
     id="staffDashboard"
     class="staff-dashboard"
     style="display:none;">
 
-    <p class="eyebrow">STAFF CONTROL</p>
+    <p class="eyebrow">
+      STAFF CONTROL
+    </p>
 
     <h1>
       Tryout <span>Manager</span>
     </h1>
 
-    <p class="lead" id="loggedInAs"></p>
+    <p
+      class="lead"
+      id="loggedInAs">
+    </p>
 
+
+
+    <!-- ADD SERVER -->
 
     <div class="staff-box">
 
@@ -82,26 +153,41 @@
         Add <span>VIP Server</span>
       </h2>
 
-      <label for="serverName">Server Name</label>
+
+      <label for="serverName">
+        Server Name
+      </label>
 
       <input
         type="text"
         id="serverName"
         placeholder="Example: Tryout Server 1">
 
-      <label for="serverLink">VIP Server Link</label>
+
+      <label for="serverLink">
+        VIP Server Link
+      </label>
 
       <input
         type="url"
         id="serverLink"
         placeholder="https://www.roblox.com/share...">
 
-      <button class="btn" id="addServerButton">
+
+      <button
+        class="btn"
+        id="addServerButton"
+        type="button">
+
         ➕ Add Server
+
       </button>
 
     </div>
 
+
+
+    <!-- SERVERS -->
 
     <div class="staff-box">
 
@@ -114,22 +200,40 @@
     </div>
 
 
-    <button class="btn ghost" id="logoutButton">
+
+    <!-- LOGOUT -->
+
+    <button
+      class="btn ghost"
+      id="logoutButton"
+      type="button">
+
       🚪 Logout
+
     </button>
 
   </section>
 
 </main>
 
+
 <footer>
+
   © <span id="year"></span> 7TPclan
+
 </footer>
 
+
+<!-- SUPABASE -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="supabase.js"></script>
+
 <script src="staff.js"></script>
+
 <script src="script.js"></script>
+
 
 </body>
 </html>
