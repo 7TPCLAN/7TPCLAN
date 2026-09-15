@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Staff Panel | 7TPclan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <a class="logo" href="index.html">7TP <span>CLAN</span></a>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="tryouts.html">Tryouts</a>
+  </nav>
+</header>
+
+<main class="page">
+
+  <section id="loginSection" class="staff-login">
+
+    <p class="eyebrow">STAFF ACCESS</p>
+
+    <h1>
+      Staff <span>Panel</span>
+    </h1>
+
+    <p class="lead">
+      Sign in with your Tryout Staff account to manage VIP servers.
+    </p>
+
+    <div class="login-box">
+
+      <label for="staffEmail">Staff Email</label>
+
+      <input
+        type="email"
+        id="staffEmail"
+        autocomplete="username"
+        placeholder="staff@example.com">
+
+      <label for="staffPassword">Password</label>
+
+      <input
+        type="password"
+        id="staffPassword"
+        autocomplete="current-password"
+        placeholder="Enter password">
+
+      <button class="btn" id="loginButton">
+        🔐 Login
+      </button>
+
+      <p id="loginMessage"></p>
+
+    </div>
+
+  </section>
+
+
+  <section
+    id="staffDashboard"
+    class="staff-dashboard"
+    style="display:none;">
+
+    <p class="eyebrow">STAFF CONTROL</p>
+
+    <h1>
+      Tryout <span>Manager</span>
+    </h1>
+
+    <p class="lead" id="loggedInAs"></p>
+
+
+    <div class="staff-box">
+
+      <h2>
+        Add <span>VIP Server</span>
+      </h2>
+
+      <label for="serverName">Server Name</label>
+
+      <input
+        type="text"
+        id="serverName"
+        placeholder="Example: Tryout Server 1">
+
+      <label for="serverLink">VIP Server Link</label>
+
+      <input
+        type="url"
+        id="serverLink"
+        placeholder="https://www.roblox.com/share...">
+
+      <button class="btn" id="addServerButton">
+        ➕ Add Server
+      </button>
+
+    </div>
+
+
+    <div class="staff-box">
+
+      <h2>
+        VIP <span>Servers</span>
+      </h2>
+
+      <div id="serverList"></div>
+
+    </div>
+
+
+    <button class="btn ghost" id="logoutButton">
+      🚪 Logout
+    </button>
+
+  </section>
+
+</main>
+
+<footer>
+  © <span id="year"></span> 7TPclan
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="staff.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
