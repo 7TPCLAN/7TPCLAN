@@ -715,12 +715,84 @@ if (codeEditor) {
 }
 
 if (editorSaveButton) {
-    editorSaveButton.addEventListener("click", () => {
-        if (!currentEditorPath) return;
+    editorSaveButton.addEventListener("click", async () => {
+        if (!currentEditorPath || !codeEditor) return;
+
+        const newContent = codeEditor.value;
+
+        if (newContent === currentEditorContent) {
+            if (editorStatus) {
+                editorStatus.textContent = "No changes to save.";
+            }
+            return;
+        }
+
+        const message = window.prompt(
+            "Commit message:",
+            `Update ${currentEditorPath}`
+        );
+
+        if (!message || !message.trim()) {
+            return;
+        }
+
+        editorSaveButton.disabled = true;
 
         if (editorStatus) {
-            editorStatus.textContent =
-                "Save requires the secure GitHub backend. No GitHub token is stored in this browser.";
+            editorStatus.textContent = "Saving to GitHub...";
+        }
+
+        try {
+            const { data: { session } } =
+                await supabaseClient.auth.getSession();
+
+            if (!session?.access_token) {
+                throw new Error("Your Owner Panel session has expired. Please log in again.");
+            }
+
+            const response = await fetch(
+                `${SUPABASE_URL}/functions/v1/github-save`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${session.access_token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        path: currentEditorPath,
+                        content: newContent,
+                        message: message.trim(),
+                        sha: currentEditorSha
+                    })
+                }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || `Save failed (HTTP ${response.status})`);
+            }
+
+            currentEditorContent = newContent;
+            currentEditorSha = "";
+
+            if (editorStatus) {
+                editorStatus.textContent =
+                    `Saved successfully. Commit: ${result.commit || "created"}`;
+            }
+
+            // Refresh the file's SHA/content metadata after the commit.
+            await openGithubFile(currentEditorPath);
+
+        } catch (error) {
+            console.error("GitHub save error:", error);
+
+            if (editorStatus) {
+                editorStatus.textContent =
+                    `Could not save: ${error.message}`;
+            }
+        } finally {
+            editorSaveButton.disabled = false;
         }
     });
 }
