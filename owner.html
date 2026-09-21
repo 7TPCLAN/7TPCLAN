@@ -441,36 +441,42 @@
 
             <!-- PASSWORD -->
 
-            <label for="password">
-                Password
-            </label>
+<label for="username">
+    Username
+</label>
 
-            <input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                autocomplete="current-password"
-            >
+<input
+    id="username"
+    type="text"
+    placeholder="Enter your username"
+    autocomplete="username"
+    required
+>
 
+<label for="password">
+    Password
+</label>
 
-            <!-- LOGIN -->
+<input
+    id="password"
+    type="password"
+    placeholder="Enter your password"
+    autocomplete="current-password"
+    required
+>
 
-            <button
-                class="login-button"
-                id="loginButton"
-                type="button"
-            >
-                Login
-            </button>
+<button
+    class="login-button"
+    id="loginButton"
+    type="button"
+>
+    Login
+</button>
 
-
-            <!-- STATUS -->
-
-            <div
-                class="status"
-                id="loginStatus"
-            ></div>
-
+<div
+    class="status"
+    id="loginStatus"
+></div>
         </div>
 
     </section>
