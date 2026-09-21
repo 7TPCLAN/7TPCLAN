@@ -1,1 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>7TPCLAN — Owner Panel</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top, #17122d 0%, #07080d 45%);
+            color: #ffffff;
+            font-family: Inter, Arial, sans-serif;
+        }
+
+        /* LOGIN */
+
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
+            background: rgba(16, 17, 26, 0.95);
+            border: 1px solid #29213f;
+            border-radius: 20px;
+            box-shadow: 0 20px 70px rgba(0,0,0,.5);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 30px;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: #7c5cff;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #8e8e9d;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #b8b8c7;
+            font-size: 13px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 18px;
+
+            background: #080910;
+            border: 1px solid #292936;
+            border-radius: 10px;
+
+            color: white;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #7c5cff;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: #7c5cff;
+            color: white;
+
+            font-size: 15px;
+            font-weight: 700;
+
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-1px);
+            background: #8b70ff;
+        }
+
+        .status {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 13px;
+            color: #ff6b6b;
+        }
+
+        /* PANEL */
+
+        .panel {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 240px;
+            height: 100vh;
+
+            background: #0d0e15;
+            border-right: 1px solid #20202c;
+
+            padding: 25px 18px;
+        }
+
+        .sidebar-logo {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 35px;
+        }
+
+        .sidebar-logo span {
+            color: #7c5cff;
+        }
+
+        .nav-button {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+
+            text-align: left;
+
+            border: none;
+            border-radius: 9px;
+
+            background: transparent;
+            color: #aaaab8;
+
+            cursor: pointer;
+        }
+
+        .nav-button:hover,
+        .nav-button.active {
+            background: #19152b;
+            color: white;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 18px;
+            width: calc(100% - 36px);
+
+            padding: 11px;
+
+            border: 1px solid #302331;
+            border-radius: 9px;
+
+            background: transparent;
+            color: #ff7777;
+
+            cursor: pointer;
+        }
+
+        .content {
+            margin-left: 240px;
+            padding: 40px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 35px;
+        }
+
+        .topbar h1 {
+            font-size: 28px;
+        }
+
+        .role {
+            padding: 7px 12px;
+            border-radius: 20px;
+
+            background: #19152b;
+            color: #a992ff;
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .card {
+            padding: 22px;
+
+            background: #10111a;
+            border: 1px solid #20212d;
+            border-radius: 15px;
+        }
+
+        .card h3 {
+            color: #9999a8;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .card strong {
+            font-size: 26px;
+        }
+
+        .welcome {
+            margin-top: 25px;
+            padding: 25px;
+
+            background: linear-gradient(
+                135deg,
+                #17132b,
+                #10111a
+            );
+
+            border: 1px solid #29213f;
+            border-radius: 16px;
+        }
+
+        .welcome h2 {
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #9999a8;
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .logout {
+                position: static;
+                margin-top: 15px;
+                width: 100%;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOGIN SCREEN -->
+
+    <section class="login-screen" id="loginScreen">
+
+        <div class="login-box">
+
+            <div class="logo">
+                7TP<span>CLAN</span>
+            </div>
+
+            <div class="subtitle">
+                Official Owner Panel
+            </div>
+
+            <label for="email">Email</label>
+
+            <input
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                autocomplete="username"
+            >
+
+            <label for="password">Password</label>
+
+            <input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+            >
+
+            <button class="login-button" id="loginButton">
+                Login
+            </button>
+
+            <div class="status" id="loginStatus"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- OWNER PANEL -->
+
+    <section class="panel" id="panel">
+
+        <aside class="sidebar">
+
+            <div class="sidebar-logo">
+                7TP<span>CLAN</span>
+            </div>
+
+            <button class="nav-button active">
+                Dashboard
+            </button>
+
+            <button class="nav-button">
+                Files
+            </button>
+
+            <button class="nav-button">
+                Code Editor
+            </button>
+
+            <button class="nav-button">
+                Website
+            </button>
+
+            <button class="nav-button">
+                Deploy
+            </button>
+
+            <button class="nav-button">
+                Changelog
+            </button>
+
+            <button class="nav-button">
+                Reports
+            </button>
+
+            <button class="logout" id="logoutButton">
+                Logout
+            </button>
+
+        </aside>
+
+
+        <main class="content">
+
+            <div class="topbar">
+
+                <h1>Dashboard</h1>
+
+                <div class="role" id="userRole">
+                    OWNER
+                </div>
+
+            </div>
+
+
+            <div class="cards">
+
+                <div class="card">
+                    <h3>WEBSITE</h3>
+                    <strong>ONLINE</strong>
+                </div>
+
+                <div class="card">
+                    <h3>FILES</h3>
+                    <strong id="fileCount">0</strong>
+                </div>
+
+                <div class="card">
+                    <h3>STATUS</h3>
+                    <strong>READY</strong>
+                </div>
+
+            </div>
+
+
+            <div class="welcome">
+
+                <h2>Welcome to the 7TPCLAN Owner Panel.</h2>
+
+                <p>
+                    This is the private control center for managing
+                    the 7TPCLAN website.
+                </p>
+
+            </div>
+
+        </main>
+
+    </section>
+
+
+<script>
+
+    /*
+        SUPABASE CONFIG
+
+        Replace these with the credentials
+        from your SEPARATE Owner Panel
+        Supabase project.
+
+        Never put a service-role/secret key here.
+    */
+
+    const SUPABASE_URL = "YOUR_OWNER_PANEL_SUPABASE_URL";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+        "YOUR_OWNER_PANEL_PUBLISHABLE_KEY";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY
+        );
+
+
+    const loginScreen =
+        document.getElementById("loginScreen");
+
+    const panel =
+        document.getElementById("panel");
+
+    const loginButton =
+        document.getElementById("loginButton");
+
+    const logoutButton =
+        document.getElementById("logoutButton");
+
+    const loginStatus =
+        document.getElementById("loginStatus");
+
+
+    /* CHECK EXISTING SESSION */
+
+    async function checkSession() {
+
+        const {
+            data: { session }
+        } = await supabaseClient.auth.getSession();
+
+        if (session) {
+
+            showPanel();
+
+        }
+
+    }
+
+
+    /* LOGIN */
+
+    loginButton.addEventListener(
+        "click",
+        async () => {
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            const password =
+                document.getElementById("password").value;
+
+
+            if (!email || !password) {
+
+                loginStatus.textContent =
+                    "Enter your email and password.";
+
+                return;
+
+            }
+
+
+            loginStatus.textContent =
+                "Signing in...";
+
+
+            const {
+                error
+            } =
+                await supabaseClient.auth.signInWithPassword({
+                    email,
+                    password
+                });
+
+
+            if (error) {
+
+                loginStatus.textContent =
+                    error.message;
+
+                return;
+
+            }
+
+
+            loginStatus.textContent = "";
+
+            showPanel();
+
+        }
+    );
+
+
+    /* SHOW PANEL */
+
+    function showPanel() {
+
+        loginScreen.style.display = "none";
+        panel.style.display = "block";
+
+    }
+
+
+    /* LOGOUT */
+
+    logoutButton.addEventListener(
+        "click",
+        async () => {
+
+            await supabaseClient.auth.signOut();
+
+            panel.style.display = "none";
+            loginScreen.style.display = "flex";
+
+            document.getElementById("password").value = "";
+
+        }
+    );
+
+
+    checkSession();
+
+</script>
+
+</body>
+</html>
