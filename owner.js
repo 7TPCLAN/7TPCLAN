@@ -4,10 +4,10 @@
 // ==========================================
 
 // 🔐 NEW OWNER PANEL SUPABASE PROJECT
-const SUPABASE_URL = "YOUR_NEW_SUPABASE_PROJECT_URL";
+const SUPABASE_URL = "https://hzmupvsednhmwzvytysd.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
-    "YOUR_NEW_SUPABASE_PUBLISHABLE_KEY";
+    "sb_publishable_8z_0Mmt332ZqWHm-Wa2iOQ_O4cgDq40";
 
 const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
