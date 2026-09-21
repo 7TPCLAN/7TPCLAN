@@ -359,6 +359,116 @@
         }
 
 
+
+
+        /* =========================
+           FILES SECTION
+        ========================= */
+
+        .section {
+            display: none;
+        }
+
+        .files-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .files-path {
+            color: #8e8e9d;
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        .files-refresh {
+            padding: 9px 14px;
+            border: 1px solid #30284d;
+            border-radius: 9px;
+            background: #19152b;
+            color: white;
+            cursor: pointer;
+        }
+
+        .files-refresh:hover {
+            background: #241d3b;
+        }
+
+        .files-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .file-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 14px 16px;
+            background: #10111a;
+            border: 1px solid #20212d;
+            border-radius: 11px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .file-row:hover {
+            border-color: #30284d;
+            background: #141522;
+        }
+
+        .file-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .file-name span:last-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .file-meta {
+            color: #77778a;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .files-empty,
+        .files-error,
+        .files-loading {
+            padding: 30px;
+            text-align: center;
+            color: #8e8e9d;
+            background: #10111a;
+            border: 1px solid #20212d;
+            border-radius: 12px;
+        }
+
+        .files-error {
+            color: #ff7777;
+        }
+
+        .back-button {
+            padding: 8px 12px;
+            margin-right: 10px;
+            border: 1px solid #30284d;
+            border-radius: 8px;
+            background: transparent;
+            color: #b8b8c7;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            color: white;
+            background: #19152b;
+        }
+
         /* MOBILE */
 
         @media (max-width: 800px) {
@@ -647,6 +757,37 @@
                 </p>
 
             </div>
+
+
+            <!-- FILES -->
+            <section class="section" id="filesSection">
+
+                <div class="topbar">
+                    <h1>Files</h1>
+                    <div class="role">GITHUB</div>
+                </div>
+
+                <div class="files-toolbar">
+                    <div class="files-path" id="filesPath">7TPCLAN/7TPCLAN /</div>
+
+                    <div>
+                        <button class="back-button" id="filesBackButton" type="button">
+                            ← Back
+                        </button>
+
+                        <button class="files-refresh" id="filesRefreshButton" type="button">
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <div class="files-list" id="filesList">
+                    <div class="files-loading">
+                        Loading GitHub files...
+                    </div>
+                </div>
+
+            </section>
 
 
         </main>
