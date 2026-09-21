@@ -290,3 +290,209 @@ if (logoutButton) {
     );
 
 }
+
+
+// ================================
+// GITHUB FILES
+// ================================
+
+const GITHUB_REPO = "7TPCLAN/7TPCLAN";
+const GITHUB_BRANCH = "main";
+const GITHUB_API = "https://api.github.com";
+
+let currentFilesPath = "";
+
+const filesSection = document.getElementById("filesSection");
+const filesList = document.getElementById("filesList");
+const filesPathLabel = document.getElementById("filesPath");
+const filesBackButton = document.getElementById("filesBackButton");
+const filesRefreshButton = document.getElementById("filesRefreshButton");
+const fileCount = document.getElementById("fileCount");
+
+function showOwnerSection(sectionName) {
+    const dashboard = document.querySelector(".content > .welcome");
+    const dashboardCards = document.querySelector(".content > .cards");
+    const topbar = document.querySelector(".content > .topbar");
+
+    if (sectionName === "files") {
+        if (dashboard) dashboard.style.display = "none";
+        if (dashboardCards) dashboardCards.style.display = "none";
+        if (topbar) topbar.style.display = "none";
+        if (filesSection) filesSection.style.display = "block";
+        loadGithubFiles(currentFilesPath);
+    } else {
+        if (dashboard) dashboard.style.display = "block";
+        if (dashboardCards) dashboardCards.style.display = "grid";
+        if (topbar) topbar.style.display = "flex";
+        if (filesSection) filesSection.style.display = "none";
+    }
+}
+
+async function loadGithubFiles(path = "") {
+    if (!filesList) return;
+
+    filesList.innerHTML = '<div class="files-loading">Loading GitHub files...</div>';
+
+    const encodedPath = path
+        .split("/")
+        .filter(Boolean)
+        .map(encodeURIComponent)
+        .join("/");
+
+    const url = encodedPath
+        ? `${GITHUB_API}/repos/${GITHUB_REPO}/contents/${encodedPath}?ref=${GITHUB_BRANCH}`
+        : `${GITHUB_API}/repos/${GITHUB_REPO}/contents/?ref=${GITHUB_BRANCH}`;
+
+    try {
+        const response = await fetch(url, {
+            headers: {
+                "Accept": "application/vnd.github+json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`GitHub returned HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        const items = Array.isArray(data) ? data : [data];
+
+        currentFilesPath = path;
+
+        if (filesPathLabel) {
+            filesPathLabel.textContent =
+                `${GITHUB_REPO} / ${path ? path + " /" : ""}`;
+        }
+
+        renderGithubFiles(items);
+    } catch (error) {
+        console.error("GitHub files error:", error);
+
+        filesList.innerHTML = `
+            <div class="files-error">
+                Could not load GitHub files.<br>
+                ${escapeHtml(error.message)}
+            </div>
+        `;
+    }
+}
+
+function renderGithubFiles(items) {
+    if (!filesList) return;
+
+    filesList.innerHTML = "";
+
+    const sorted = [...items].sort((a, b) => {
+        if (a.type !== b.type) {
+            return a.type === "dir" ? -1 : 1;
+        }
+
+        return a.name.localeCompare(b.name);
+    });
+
+    if (!sorted.length) {
+        filesList.innerHTML =
+            '<div class="files-empty">This folder is empty.</div>';
+        return;
+    }
+
+    for (const item of sorted) {
+        const row = document.createElement("div");
+        row.className = "file-row";
+
+        const icon = item.type === "dir" ? "📁" : getFileIcon(item.name);
+
+        row.innerHTML = `
+            <div class="file-name">
+                <span>${icon}</span>
+                <span>${escapeHtml(item.name)}</span>
+            </div>
+
+            <div class="file-meta">
+                ${item.type === "dir" ? "Folder" : formatFileSize(item.size)}
+            </div>
+        `;
+
+        row.addEventListener("click", () => {
+            if (item.type === "dir") {
+                loadGithubFiles(item.path);
+                return;
+            }
+
+            window.open(
+                item.html_url,
+                "_blank",
+                "noopener,noreferrer"
+            );
+        });
+
+        filesList.appendChild(row);
+    }
+}
+
+function getFileIcon(name) {
+    const lower = name.toLowerCase();
+
+    if (lower.endsWith(".html")) return "🌐";
+    if (lower.endsWith(".js")) return "📜";
+    if (lower.endsWith(".css")) return "🎨";
+    if (lower.endsWith(".json")) return "⚙️";
+    if (lower.endsWith(".png") || lower.endsWith(".jpg") || lower.endsWith(".jpeg") || lower.endsWith(".webp")) {
+        return "🖼️";
+    }
+
+    return "📄";
+}
+
+function formatFileSize(size = 0) {
+    if (size < 1024) return `${size} B`;
+    if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
+
+    return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function escapeHtml(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+if (filesRefreshButton) {
+    filesRefreshButton.addEventListener("click", () => {
+        loadGithubFiles(currentFilesPath);
+    });
+}
+
+if (filesBackButton) {
+    filesBackButton.addEventListener("click", () => {
+        if (!currentFilesPath) return;
+
+        const parts = currentFilesPath.split("/").filter(Boolean);
+        parts.pop();
+
+        loadGithubFiles(parts.join("/"));
+    });
+}
+
+// Sidebar navigation
+document.querySelectorAll(".nav-button").forEach((button) => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll(".nav-button")
+            .forEach((item) => item.classList.remove("active"));
+
+        button.classList.add("active");
+
+        const name = button.textContent.trim().toLowerCase();
+
+        if (name === "files") {
+            showOwnerSection("files");
+            return;
+        }
+
+        // Other sections will be wired up next.
+        showOwnerSection("dashboard");
+    });
+});
