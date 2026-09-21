@@ -309,29 +309,38 @@ const filesBackButton = document.getElementById("filesBackButton");
 const filesRefreshButton = document.getElementById("filesRefreshButton");
 const fileCount = document.getElementById("fileCount");
 
-function showOwnerSection(sectionName) {
-    const dashboard = document.querySelector(".content > .welcome");
-    const dashboardCards = document.querySelector(".content > .cards");
-    const topbar = document.querySelector(".content > .topbar");
+const dashboardTopbar = document.getElementById("dashboardTopbar");
+const dashboardCards = document.getElementById("dashboardCards");
+const dashboardWelcome = document.getElementById("dashboardWelcome");
 
-    if (sectionName === "files") {
-        if (dashboard) dashboard.style.display = "none";
-        if (dashboardCards) dashboardCards.style.display = "none";
-        if (topbar) topbar.style.display = "none";
-        if (filesSection) filesSection.style.display = "block";
-        loadGithubFiles(currentFilesPath);
-    } else {
-        if (dashboard) dashboard.style.display = "block";
-        if (dashboardCards) dashboardCards.style.display = "grid";
-        if (topbar) topbar.style.display = "flex";
-        if (filesSection) filesSection.style.display = "none";
-    }
+function showDashboard() {
+    console.log("Owner Panel: opening Dashboard");
+
+    if (filesSection) filesSection.style.display = "none";
+    if (dashboardTopbar) dashboardTopbar.style.display = "flex";
+    if (dashboardCards) dashboardCards.style.display = "grid";
+    if (dashboardWelcome) dashboardWelcome.style.display = "block";
+}
+
+function showFiles() {
+    console.log("Owner Panel: opening Files");
+
+    if (dashboardTopbar) dashboardTopbar.style.display = "none";
+    if (dashboardCards) dashboardCards.style.display = "none";
+    if (dashboardWelcome) dashboardWelcome.style.display = "none";
+    if (filesSection) filesSection.style.display = "block";
+
+    loadGithubFiles(currentFilesPath);
 }
 
 async function loadGithubFiles(path = "") {
-    if (!filesList) return;
+    if (!filesList) {
+        console.error("Owner Panel: filesList was not found.");
+        return;
+    }
 
-    filesList.innerHTML = '<div class="files-loading">Loading GitHub files...</div>';
+    filesList.innerHTML =
+        '<div class="files-loading">Loading GitHub files...</div>';
 
     const encodedPath = path
         .split("/")
@@ -364,7 +373,12 @@ async function loadGithubFiles(path = "") {
                 `${GITHUB_REPO} / ${path ? path + " /" : ""}`;
         }
 
+        if (fileCount) {
+            fileCount.textContent = items.length;
+        }
+
         renderGithubFiles(items);
+
     } catch (error) {
         console.error("GitHub files error:", error);
 
@@ -399,8 +413,13 @@ function renderGithubFiles(items) {
     for (const item of sorted) {
         const row = document.createElement("div");
         row.className = "file-row";
+        row.setAttribute("role", "button");
+        row.setAttribute("tabindex", "0");
 
-        const icon = item.type === "dir" ? "📁" : getFileIcon(item.name);
+        const icon =
+            item.type === "dir"
+                ? "📁"
+                : getFileIcon(item.name);
 
         row.innerHTML = `
             <div class="file-name">
@@ -413,7 +432,7 @@ function renderGithubFiles(items) {
             </div>
         `;
 
-        row.addEventListener("click", () => {
+        const openItem = () => {
             if (item.type === "dir") {
                 loadGithubFiles(item.path);
                 return;
@@ -424,6 +443,15 @@ function renderGithubFiles(items) {
                 "_blank",
                 "noopener,noreferrer"
             );
+        };
+
+        row.addEventListener("click", openItem);
+
+        row.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                openItem();
+            }
         });
 
         filesList.appendChild(row);
@@ -437,7 +465,13 @@ function getFileIcon(name) {
     if (lower.endsWith(".js")) return "📜";
     if (lower.endsWith(".css")) return "🎨";
     if (lower.endsWith(".json")) return "⚙️";
-    if (lower.endsWith(".png") || lower.endsWith(".jpg") || lower.endsWith(".jpeg") || lower.endsWith(".webp")) {
+
+    if (
+        lower.endsWith(".png") ||
+        lower.endsWith(".jpg") ||
+        lower.endsWith(".jpeg") ||
+        lower.endsWith(".webp")
+    ) {
         return "🖼️";
     }
 
@@ -446,7 +480,9 @@ function getFileIcon(name) {
 
 function formatFileSize(size = 0) {
     if (size < 1024) return `${size} B`;
-    if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
+    if (size < 1024 * 1024) {
+        return `${(size / 1024).toFixed(1)} KB`;
+    }
 
     return `${(size / (1024 * 1024)).toFixed(1)} MB`;
 }
@@ -468,16 +504,25 @@ if (filesRefreshButton) {
 
 if (filesBackButton) {
     filesBackButton.addEventListener("click", () => {
-        if (!currentFilesPath) return;
+        if (!currentFilesPath) {
+            showFiles();
+            return;
+        }
 
-        const parts = currentFilesPath.split("/").filter(Boolean);
+        const parts = currentFilesPath
+            .split("/")
+            .filter(Boolean);
+
         parts.pop();
 
         loadGithubFiles(parts.join("/"));
     });
 }
 
-// Sidebar navigation
+// ================================
+// SIDEBAR NAVIGATION
+// ================================
+
 document.querySelectorAll(".nav-button").forEach((button) => {
     button.addEventListener("click", () => {
         document.querySelectorAll(".nav-button")
@@ -485,14 +530,18 @@ document.querySelectorAll(".nav-button").forEach((button) => {
 
         button.classList.add("active");
 
-        const name = button.textContent.trim().toLowerCase();
+        const section = button.dataset.section;
 
-        if (name === "files") {
-            showOwnerSection("files");
+        console.log("Owner Panel navigation:", section);
+
+        if (section === "files") {
+            showFiles();
             return;
         }
 
-        // Other sections will be wired up next.
-        showOwnerSection("dashboard");
+        showDashboard();
     });
 });
+
+// Make sure the dashboard is the initial view.
+showDashboard();
