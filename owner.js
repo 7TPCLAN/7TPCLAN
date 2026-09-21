@@ -445,7 +445,28 @@ function renderGithubFiles(items) {
             );
         };
 
-        row.addEventListener("click", openItem);
+        row.addEventListener("click", () => {
+            if (item.type === "dir") {
+                loadGithubFiles(item.path);
+                return;
+            }
+
+            const editableExtensions = [
+                ".html", ".htm", ".css", ".js", ".json",
+                ".md", ".txt", ".xml", ".svg"
+            ];
+
+            const lowerName = item.name.toLowerCase();
+            const editable = editableExtensions.some(
+                (extension) => lowerName.endsWith(extension)
+            );
+
+            if (editable) {
+                openGithubFile(item.path);
+            } else {
+                openItem();
+            }
+        });
 
         row.addEventListener("keydown", (event) => {
             if (event.key === "Enter" || event.key === " ") {
@@ -520,6 +541,191 @@ if (filesBackButton) {
 }
 
 // ================================
+// CODE EDITOR
+// ================================
+
+const editorSection = document.getElementById("editorSection");
+const codeEditor = document.getElementById("codeEditor");
+const editorFile = document.getElementById("editorFile");
+const editorStatus = document.getElementById("editorStatus");
+const editorSaveButton = document.getElementById("editorSaveButton");
+const editorReloadButton = document.getElementById("editorReloadButton");
+const editorCloseButton = document.getElementById("editorCloseButton");
+
+let currentEditorPath = "";
+let currentEditorSha = "";
+let currentEditorContent = "";
+
+function showEditor() {
+    if (dashboardTopbar) dashboardTopbar.style.display = "none";
+    if (dashboardCards) dashboardCards.style.display = "none";
+    if (dashboardWelcome) dashboardWelcome.style.display = "none";
+    if (filesSection) filesSection.style.display = "none";
+    if (editorSection) editorSection.style.display = "block";
+
+    setActiveNav("code-editor");
+}
+
+function closeEditor() {
+    if (editorSection) editorSection.style.display = "none";
+    showFiles();
+    setActiveNav("files");
+}
+
+function setActiveNav(sectionName) {
+    document.querySelectorAll(".nav-button").forEach((button) => {
+        button.classList.toggle(
+            "active",
+            button.dataset.section === sectionName
+        );
+    });
+}
+
+async function openGithubFile(path) {
+    showEditor();
+
+    if (editorFile) {
+        editorFile.textContent = `Loading: ${path}`;
+    }
+
+    if (editorStatus) {
+        editorStatus.textContent = "Loading file from GitHub...";
+    }
+
+    if (codeEditor) {
+        codeEditor.value = "";
+    }
+
+    if (editorSaveButton) {
+        editorSaveButton.disabled = true;
+    }
+
+    try {
+        const response = await fetch(
+            `${GITHUB_API}/repos/${GITHUB_REPO}/contents/${path}?ref=${GITHUB_BRANCH}`,
+            {
+                headers: {
+                    "Accept": "application/vnd.github+json"
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`GitHub returned HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.type !== "file") {
+            throw new Error("That item is not a text file.");
+        }
+
+        if (!data.content) {
+            throw new Error("GitHub did not return file content.");
+        }
+
+        const decoded = atob(
+            data.content.replace(/\\s/g, "")
+        );
+
+        const bytes = Uint8Array.from(
+            decoded,
+            (character) => character.charCodeAt(0)
+        );
+
+        const content = new TextDecoder("utf-8").decode(bytes);
+
+        currentEditorPath = path;
+        currentEditorSha = data.sha;
+        currentEditorContent = content;
+
+        if (editorFile) {
+            editorFile.textContent =
+                `${GITHUB_REPO} / ${path}`;
+        }
+
+        if (codeEditor) {
+            codeEditor.value = content;
+        }
+
+        if (editorSaveButton) {
+            editorSaveButton.disabled = false;
+        }
+
+        if (editorStatus) {
+            editorStatus.textContent =
+                "File loaded. Saving will be connected securely next.";
+        }
+
+    } catch (error) {
+        console.error("Code Editor error:", error);
+
+        if (editorStatus) {
+            editorStatus.textContent =
+                `Could not open file: ${error.message}`;
+        }
+    }
+}
+
+function refreshEditor() {
+    if (!currentEditorPath) return;
+    openGithubFile(currentEditorPath);
+}
+
+if (editorCloseButton) {
+    editorCloseButton.addEventListener("click", closeEditor);
+}
+
+if (editorReloadButton) {
+    editorReloadButton.addEventListener("click", refreshEditor);
+}
+
+if (codeEditor) {
+    codeEditor.addEventListener("input", () => {
+        const changed =
+            codeEditor.value !== currentEditorContent;
+
+        if (editorStatus) {
+            editorStatus.textContent =
+                changed
+                    ? "Unsaved changes"
+                    : "No changes";
+        }
+    });
+
+    codeEditor.addEventListener("keydown", (event) => {
+        if (event.key === "Tab") {
+            event.preventDefault();
+
+            const start = codeEditor.selectionStart;
+            const end = codeEditor.selectionEnd;
+
+            codeEditor.value =
+                codeEditor.value.substring(0, start) +
+                "    " +
+                codeEditor.value.substring(end);
+
+            codeEditor.selectionStart =
+                codeEditor.selectionEnd =
+                    start + 4;
+
+            codeEditor.dispatchEvent(new Event("input"));
+        }
+    });
+}
+
+if (editorSaveButton) {
+    editorSaveButton.addEventListener("click", () => {
+        if (!currentEditorPath) return;
+
+        if (editorStatus) {
+            editorStatus.textContent =
+                "Save requires the secure GitHub backend. No GitHub token is stored in this browser.";
+        }
+    });
+}
+
+// ================================
 // SIDEBAR NAVIGATION
 // ================================
 
@@ -536,6 +742,11 @@ document.querySelectorAll(".nav-button").forEach((button) => {
 
         if (section === "files") {
             showFiles();
+            return;
+        }
+
+        if (section === "code-editor") {
+            showEditor();
             return;
         }
 
