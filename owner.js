@@ -1,7 +1,6 @@
 const SUPABASE_URL = "https://hzmupvsednhmwzvytysd.supabase.co";
 
-// IMPORTANT:
-// Put your actual SUPABASE PUBLISHABLE KEY here.
+// Supabase Publishable Key
 const SUPABASE_KEY = "sb_publishable_8z_0Mmt332ZqWHm-Wa2iOQ_O4cgDq40";
 
 
@@ -102,11 +101,11 @@ async function loginOwner() {
 
 
     // ================================
-    // USERNAME → EMAIL
+    // USERNAME → REAL AUTH EMAIL
     // ================================
 
     const authEmail =
-        username.toLowerCase() + "@7tpclan.com";
+        "ThunderPainYT.7tpclan@gmail.com";
 
 
     console.log(
