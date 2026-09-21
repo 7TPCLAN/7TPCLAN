@@ -7,367 +7,180 @@
 
     <title>7TPCLAN — Owner Panel</title>
 
-    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             min-height: 100vh;
-
-            background:
-                radial-gradient(
-                    circle at top,
-                    #17122d 0%,
-                    #07080d 50%
-                );
-
+            background: radial-gradient(circle at top, #17122d 0%, #07080d 50%);
             color: white;
             font-family: Inter, Arial, sans-serif;
         }
 
-        /* =========================
-           LOGIN SCREEN
-        ========================= */
-
         .login-screen {
             min-height: 100vh;
-
             display: flex;
             justify-content: center;
             align-items: center;
-
             padding: 20px;
         }
 
         .login-box {
             width: 100%;
             max-width: 420px;
-
             padding: 40px;
-
             background: rgba(16, 17, 26, 0.96);
-
             border: 1px solid #29213f;
             border-radius: 20px;
-
-            box-shadow:
-                0 20px 70px rgba(0, 0, 0, 0.55);
+            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.55);
         }
 
-        .logo {
-            text-align: center;
+        .logo { text-align: center; font-size: 30px; font-weight: 800; margin-bottom: 8px; }
+        .logo span, .sidebar-logo span { color: #7c5cff; }
+        .subtitle { text-align: center; color: #8e8e9d; font-size: 14px; margin-bottom: 30px; }
 
-            font-size: 30px;
-            font-weight: 800;
-
-            margin-bottom: 8px;
-        }
-
-        .logo span {
-            color: #7c5cff;
-        }
-
-        .subtitle {
-            text-align: center;
-
-            color: #8e8e9d;
-
-            font-size: 14px;
-
-            margin-bottom: 30px;
-        }
-
-        label {
-            display: block;
-
-            color: #b8b8c7;
-
-            font-size: 13px;
-
-            margin-bottom: 8px;
-        }
+        label { display: block; color: #b8b8c7; font-size: 13px; margin-bottom: 8px; }
 
         input {
             width: 100%;
-
             padding: 14px;
-
             margin-bottom: 18px;
-
             background: #080910;
-
             border: 1px solid #292936;
             border-radius: 10px;
-
             color: white;
-
             outline: none;
         }
 
         input:focus {
             border-color: #7c5cff;
-
-            box-shadow:
-                0 0 0 2px rgba(124, 92, 255, 0.12);
+            box-shadow: 0 0 0 2px rgba(124, 92, 255, 0.12);
         }
 
         .login-button {
             width: 100%;
-
             padding: 14px;
-
             border: none;
             border-radius: 10px;
-
             background: #7c5cff;
-
             color: white;
-
             font-size: 15px;
             font-weight: 700;
-
             cursor: pointer;
-
             transition: 0.2s;
         }
 
-        .login-button:hover {
-            background: #8b70ff;
-
-            transform: translateY(-1px);
-        }
+        .login-button:hover { background: #8b70ff; transform: translateY(-1px); }
 
         .status {
             min-height: 18px;
-
             margin-top: 15px;
-
             text-align: center;
-
             font-size: 13px;
-
             color: #ff6b6b;
         }
 
-
-        /* =========================
-           OWNER PANEL
-        ========================= */
-
-        .panel {
-            display: none;
-
-            min-height: 100vh;
-        }
-
-
-        /* SIDEBAR */
+        .panel { display: none; min-height: 100vh; }
 
         .sidebar {
             position: fixed;
-
             left: 0;
             top: 0;
-
             width: 240px;
             height: 100vh;
-
             padding: 25px 18px;
-
             background: #0d0e15;
-
             border-right: 1px solid #20202c;
         }
 
-        .sidebar-logo {
-            font-size: 22px;
-            font-weight: 800;
-
-            margin-bottom: 35px;
-        }
-
-        .sidebar-logo span {
-            color: #7c5cff;
-        }
+        .sidebar-logo { font-size: 22px; font-weight: 800; margin-bottom: 35px; }
 
         .nav-button {
             width: 100%;
-
             padding: 12px 14px;
-
             margin-bottom: 8px;
-
             text-align: left;
-
             border: none;
             border-radius: 9px;
-
             background: transparent;
-
             color: #aaaab8;
-
             cursor: pointer;
-
             transition: 0.2s;
         }
 
-        .nav-button:hover,
-        .nav-button.active {
+        .nav-button:hover, .nav-button.active {
             background: #19152b;
-
             color: white;
         }
 
         .logout {
             position: absolute;
-
             bottom: 25px;
             left: 18px;
-
             width: calc(100% - 36px);
-
             padding: 11px;
-
             border: 1px solid #302331;
             border-radius: 9px;
-
             background: transparent;
-
             color: #ff7777;
-
             cursor: pointer;
-
             transition: 0.2s;
         }
 
-        .logout:hover {
-            background: #21151a;
-        }
+        .logout:hover { background: #21151a; }
 
-
-        /* MAIN CONTENT */
-
-        .content {
-            margin-left: 240px;
-
-            padding: 40px;
-        }
+        .content { margin-left: 240px; padding: 40px; }
 
         .topbar {
             display: flex;
-
             justify-content: space-between;
             align-items: center;
-
             margin-bottom: 35px;
         }
 
-        .topbar h1 {
-            font-size: 28px;
-        }
+        .topbar h1 { font-size: 28px; }
 
         .role {
             padding: 7px 12px;
-
             border-radius: 20px;
-
             background: #19152b;
-
             color: #a992ff;
-
             font-size: 12px;
-
             font-weight: 700;
         }
 
-
-        /* DASHBOARD CARDS */
-
         .cards {
             display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
+            grid-template-columns: repeat(3, 1fr);
             gap: 18px;
         }
 
         .card {
             padding: 22px;
-
             background: #10111a;
-
             border: 1px solid #20212d;
-
             border-radius: 15px;
-
             transition: 0.2s;
         }
 
-        .card:hover {
-            transform: translateY(-2px);
-
-            border-color: #30284d;
-        }
-
-        .card h3 {
-            color: #9999a8;
-
-            font-size: 13px;
-
-            margin-bottom: 12px;
-        }
-
-        .card strong {
-            font-size: 25px;
-        }
-
-
-        /* WELCOME */
+        .card:hover { transform: translateY(-2px); border-color: #30284d; }
+        .card h3 { color: #9999a8; font-size: 13px; margin-bottom: 12px; }
+        .card strong { font-size: 25px; }
 
         .welcome {
             margin-top: 25px;
-
             padding: 25px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #17132b,
-                    #10111a
-                );
-
+            background: linear-gradient(135deg, #17132b, #10111a);
             border: 1px solid #29213f;
-
             border-radius: 16px;
         }
 
-        .welcome h2 {
-            margin-bottom: 8px;
-        }
+        .welcome h2 { margin-bottom: 8px; }
+        .welcome p { color: #9999a8; line-height: 1.6; }
 
-        .welcome p {
-            color: #9999a8;
-
-            line-height: 1.6;
-        }
-
-
-
-
-        /* =========================
-           FILES SECTION
-        ========================= */
-
-        .section {
-            display: none;
-        }
+        .section { display: none; }
 
         .files-toolbar {
             display: flex;
@@ -377,11 +190,7 @@
             margin-bottom: 18px;
         }
 
-        .files-path {
-            color: #8e8e9d;
-            font-size: 13px;
-            word-break: break-all;
-        }
+        .files-path { color: #8e8e9d; font-size: 13px; word-break: break-all; }
 
         .files-refresh {
             padding: 9px 14px;
@@ -392,15 +201,9 @@
             cursor: pointer;
         }
 
-        .files-refresh:hover {
-            background: #241d3b;
-        }
+        .files-refresh:hover { background: #241d3b; }
 
-        .files-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        .files-list { display: flex; flex-direction: column; gap: 8px; }
 
         .file-row {
             display: flex;
@@ -415,33 +218,13 @@
             transition: 0.2s;
         }
 
-        .file-row:hover {
-            border-color: #30284d;
-            background: #141522;
-        }
+        .file-row:hover { border-color: #30284d; background: #141522; }
 
-        .file-name {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 0;
-        }
+        .file-name { display: flex; align-items: center; gap: 10px; min-width: 0; }
+        .file-name span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .file-meta { color: #77778a; font-size: 12px; flex-shrink: 0; }
 
-        .file-name span:last-child {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .file-meta {
-            color: #77778a;
-            font-size: 12px;
-            flex-shrink: 0;
-        }
-
-        .files-empty,
-        .files-error,
-        .files-loading {
+        .files-empty, .files-error, .files-loading {
             padding: 30px;
             text-align: center;
             color: #8e8e9d;
@@ -450,9 +233,7 @@
             border-radius: 12px;
         }
 
-        .files-error {
-            color: #ff7777;
-        }
+        .files-error { color: #ff7777; }
 
         .back-button {
             padding: 8px 12px;
@@ -464,304 +245,83 @@
             cursor: pointer;
         }
 
-        .back-button:hover {
-            color: white;
-            background: #19152b;
-        }
-
-        /* MOBILE */
+        .back-button:hover { color: white; background: #19152b; }
 
         @media (max-width: 800px) {
-
-            .sidebar {
-                position: relative;
-
-                width: 100%;
-                height: auto;
-            }
-
-            .logout {
-                position: static;
-
-                width: 100%;
-
-                margin-top: 15px;
-            }
-
-            .content {
-                margin-left: 0;
-
-                padding: 20px;
-            }
-
-            .cards {
-                grid-template-columns: 1fr;
-            }
-
-            .topbar {
-                gap: 15px;
-
-                align-items: flex-start;
-            }
-
-            .topbar h1 {
-                font-size: 24px;
-            }
+            .sidebar { position: relative; width: 100%; height: auto; }
+            .logout { position: static; width: 100%; margin-top: 15px; }
+            .content { margin-left: 0; padding: 20px; }
+            .cards { grid-template-columns: 1fr; }
+            .topbar { gap: 15px; align-items: flex-start; }
+            .topbar h1 { font-size: 24px; }
         }
     </style>
 </head>
 
-
 <body>
 
-
-    <!-- =====================================
-         LOGIN SCREEN
-    ====================================== -->
-
-    <section
-        class="login-screen"
-        id="loginScreen"
-    >
-
+    <section class="login-screen" id="loginScreen">
         <div class="login-box">
+            <div class="logo">7TP<span>CLAN</span></div>
+            <div class="subtitle">Official Owner Panel</div>
 
-            <div class="logo">
-                7TP<span>CLAN</span>
-            </div>
+            <label for="username">Username</label>
+            <input id="username" type="text" placeholder="Enter your username" autocomplete="username" required>
 
-            <div class="subtitle">
-                Official Owner Panel
-            </div>
+            <label for="password">Password</label>
+            <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
 
-
-            <!-- USERNAME -->
-
-            <label for="username">
-                Username
-            </label>
-
-            <input
-                id="username"
-                type="text"
-                placeholder="Enter your username"
-                autocomplete="username"
-                required
-            >
-
-
-            <!-- PASSWORD -->
-
-            <label for="password">
-                Password
-            </label>
-
-            <input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                autocomplete="current-password"
-                required
-            >
-
-
-            <!-- LOGIN -->
-
-            <button
-                class="login-button"
-                id="loginButton"
-                type="button"
-            >
-                Login
-            </button>
-
-
-            <!-- STATUS -->
-
-            <div
-                class="status"
-                id="loginStatus"
-            ></div>
-
+            <button class="login-button" id="loginButton" type="button">Login</button>
+            <div class="status" id="loginStatus"></div>
         </div>
-
     </section>
 
-
-    <!-- =====================================
-         OWNER PANEL
-    ====================================== -->
-
-    <section
-        class="panel"
-        id="panel"
-    >
-
-
-        <!-- SIDEBAR -->
+    <section class="panel" id="panel">
 
         <aside class="sidebar">
+            <div class="sidebar-logo">7TP<span>CLAN</span></div>
 
-            <div class="sidebar-logo">
-                7TP<span>CLAN</span>
-            </div>
+            <button class="nav-button active" id="navDashboard" data-section="dashboard" type="button">Dashboard</button>
+            <button class="nav-button" id="navFiles" data-section="files" type="button">Files</button>
+            <button class="nav-button" data-section="code-editor" type="button">Code Editor</button>
+            <button class="nav-button" data-section="website" type="button">Website</button>
+            <button class="nav-button" data-section="deploy" type="button">Deploy</button>
+            <button class="nav-button" data-section="changelog" type="button">Changelog</button>
+            <button class="nav-button" data-section="reports" type="button">Reports</button>
 
-
-            <button
-                class="nav-button active"
-                type="button"
-            >
-                Dashboard
-            </button>
-
-
-            <button
-                class="nav-button"
-                type="button"
-            >
-                Files
-            </button>
-
-
-            <button
-                class="nav-button"
-                type="button"
-            >
-                Code Editor
-            </button>
-
-
-            <button
-                class="nav-button"
-                type="button"
-            >
-                Website
-            </button>
-
-
-            <button
-                class="nav-button"
-                type="button"
-            >
-                Deploy
-            </button>
-
-
-            <button
-                class="nav-button"
-                type="button"
-            >
-                Changelog
-            </button>
-
-
-            <button
-                class="nav-button"
-                type="button"
-            >
-                Reports
-            </button>
-
-
-            <button
-                class="logout"
-                id="logoutButton"
-                type="button"
-            >
-                Logout
-            </button>
-
+            <button class="logout" id="logoutButton" type="button">Logout</button>
         </aside>
-
-
-        <!-- MAIN -->
 
         <main class="content">
 
-
-            <div class="topbar">
-
-                <h1>
-                    Dashboard
-                </h1>
-
-
-                <div
-                    class="role"
-                    id="userRole"
-                >
-                    OWNER
-                </div>
-
+            <div class="topbar" id="dashboardTopbar">
+                <h1>Dashboard</h1>
+                <div class="role" id="userRole">OWNER</div>
             </div>
 
-
-            <!-- CARDS -->
-
-            <div class="cards">
-
-
+            <div class="cards" id="dashboardCards">
                 <div class="card">
-
-                    <h3>
-                        WEBSITE
-                    </h3>
-
-                    <strong>
-                        ONLINE
-                    </strong>
-
+                    <h3>WEBSITE</h3>
+                    <strong>ONLINE</strong>
                 </div>
 
-
                 <div class="card">
-
-                    <h3>
-                        FILES
-                    </h3>
-
-                    <strong id="fileCount">
-                        0
-                    </strong>
-
+                    <h3>FILES</h3>
+                    <strong id="fileCount">0</strong>
                 </div>
 
-
                 <div class="card">
-
-                    <h3>
-                        STATUS
-                    </h3>
-
-                    <strong>
-                        READY
-                    </strong>
-
+                    <h3>STATUS</h3>
+                    <strong>READY</strong>
                 </div>
-
-
             </div>
 
-
-            <!-- WELCOME -->
-
-            <div class="welcome">
-
-                <h2>
-                    Welcome to the 7TPCLAN Owner Panel.
-                </h2>
-
-                <p>
-                    This is the private control center
-                    for managing the 7TPCLAN website.
-                </p>
-
+            <div class="welcome" id="dashboardWelcome">
+                <h2>Welcome to the 7TPCLAN Owner Panel.</h2>
+                <p>This is the private control center for managing the 7TPCLAN website.</p>
             </div>
 
-
-            <!-- FILES -->
             <section class="section" id="filesSection">
-
                 <div class="topbar">
                     <h1>Files</h1>
                     <div class="role">GITHUB</div>
@@ -771,36 +331,20 @@
                     <div class="files-path" id="filesPath">7TPCLAN/7TPCLAN /</div>
 
                     <div>
-                        <button class="back-button" id="filesBackButton" type="button">
-                            ← Back
-                        </button>
-
-                        <button class="files-refresh" id="filesRefreshButton" type="button">
-                            Refresh
-                        </button>
+                        <button class="back-button" id="filesBackButton" type="button">← Back</button>
+                        <button class="files-refresh" id="filesRefreshButton" type="button">Refresh</button>
                     </div>
                 </div>
 
                 <div class="files-list" id="filesList">
-                    <div class="files-loading">
-                        Loading GitHub files...
-                    </div>
+                    <div class="files-loading">Loading GitHub files...</div>
                 </div>
-
             </section>
 
-
         </main>
-
     </section>
 
-
-    <!-- =====================================
-         OWNER PANEL JAVASCRIPT
-    ====================================== -->
-
     <script src="owner.js"></script>
-
 </body>
 
 </html>
