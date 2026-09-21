@@ -80,16 +80,11 @@ loginButton.addEventListener("click", async () => {
             password
         });
 
-
-    if (error) {
-
-        console.error(error);
-
-        loginStatus.textContent =
-            "Login failed.";
-
-        return;
-    }
+if (error) {
+    console.error("SUPABASE LOGIN ERROR:", error);
+    loginStatus.textContent = error.message;
+    return;
+}
 
 
     console.log("Logged in:", data.user.email);
