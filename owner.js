@@ -315,25 +315,39 @@ const dashboardTopbar = document.getElementById("dashboardTopbar");
 const dashboardCards = document.getElementById("dashboardCards");
 const dashboardWelcome = document.getElementById("dashboardWelcome");
 
+function hideAllMainViews() {
+    if (dashboardTopbar) dashboardTopbar.style.display = "none";
+    if (dashboardCards) dashboardCards.style.display = "none";
+    if (dashboardWelcome) dashboardWelcome.style.display = "none";
+    if (filesSection) filesSection.style.display = "none";
+    if (editorSection) editorSection.style.display = "none";
+}
+
 function showDashboard() {
     console.log("Owner Panel: opening Dashboard");
 
-    if (filesSection) filesSection.style.display = "none";
+    hideAllMainViews();
+
     if (dashboardTopbar) dashboardTopbar.style.display = "flex";
     if (dashboardCards) dashboardCards.style.display = "grid";
     if (dashboardWelcome) dashboardWelcome.style.display = "block";
+
+    setActiveNav("dashboard");
 }
 
 function showFiles() {
     console.log("Owner Panel: opening Files");
 
-    if (dashboardTopbar) dashboardTopbar.style.display = "none";
-    if (dashboardCards) dashboardCards.style.display = "none";
-    if (dashboardWelcome) dashboardWelcome.style.display = "none";
+    hideAllMainViews();
+
     if (filesSection) filesSection.style.display = "block";
 
+    setActiveNav("files");
     loadGithubFiles(currentFilesPath);
 }
+
+window.showDashboard = showDashboard;
+window.showFiles = showFiles;
 
 async function loadGithubFiles(path = "") {
     if (!filesList) {
@@ -806,14 +820,16 @@ let currentEditorSha = "";
 let currentEditorContent = "";
 
 function showEditor() {
-    if (dashboardTopbar) dashboardTopbar.style.display = "none";
-    if (dashboardCards) dashboardCards.style.display = "none";
-    if (dashboardWelcome) dashboardWelcome.style.display = "none";
-    if (filesSection) filesSection.style.display = "none";
+    console.log("Owner Panel: opening Code Editor");
+
+    hideAllMainViews();
+
     if (editorSection) editorSection.style.display = "block";
 
     setActiveNav("code-editor");
 }
+
+window.showEditor = showEditor;
 
 function closeEditor() {
     if (editorSection) editorSection.style.display = "none";
