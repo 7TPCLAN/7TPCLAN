@@ -481,7 +481,99 @@
         </main>
     </section>
 
-    <script src="owner.js?v=20260923-2"></script>
+    <script>
+        // ================================
+        // OWNER LOGIN FALLBACK
+        // ================================
+        // This login handler lives in owner.html itself so the
+        // Login button still works even if owner.js is cached/fails.
+        window.__ownerLoginBound = true;
+
+        window.__ownerLogin = async function () {
+            const usernameInput = document.getElementById("username");
+            const passwordInput = document.getElementById("password");
+            const loginStatus = document.getElementById("loginStatus");
+
+            try {
+                if (!usernameInput || !passwordInput || !loginStatus) {
+                    throw new Error("Login form could not be initialized.");
+                }
+
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value;
+
+                if (!username || !password) {
+                    loginStatus.textContent = "Enter your username and password.";
+                    return;
+                }
+
+                loginStatus.textContent = "Logging in...";
+                loginStatus.style.color = "#a992ff";
+
+                if (!window.supabase) {
+                    throw new Error("Supabase library did not load. Refresh the page and try again.");
+                }
+
+                const client = window.supabase.createClient(
+                    "https://hzmupvsednhmwzvytysd.supabase.co",
+                    "sb_publishable_8z_0Mmt332ZqWHm-Wa2iOQ_O4cgDq40"
+                );
+
+                const { data, error } = await client.auth.signInWithPassword({
+                    email: "ThunderPainYT.7tpclan@gmail.com",
+                    password
+                });
+
+                if (error) {
+                    loginStatus.style.color = "#ff6b6b";
+                    loginStatus.textContent = error.message;
+                    return;
+                }
+
+                if (!data?.user) {
+                    throw new Error("Supabase did not return a user session.");
+                }
+
+                const { data: profile, error: profileError } = await client
+                    .from("profiles")
+                    .select("id, username, role")
+                    .eq("id", data.user.id)
+                    .single();
+
+                if (profileError || !profile) {
+                    await client.auth.signOut();
+                    throw new Error("Owner profile not found.");
+                }
+
+                if (
+                    profile.username.toLowerCase() !== username.toLowerCase() ||
+                    profile.role !== "owner"
+                ) {
+                    await client.auth.signOut();
+                    throw new Error("You don't have Owner access.");
+                }
+
+                document.getElementById("loginScreen").style.display = "none";
+                document.getElementById("panel").style.display = "block";
+                document.getElementById("userRole").textContent =
+                    profile.role.toUpperCase();
+
+                loginStatus.textContent = "";
+            } catch (error) {
+                console.error("Owner login error:", error);
+                loginStatus.style.color = "#ff6b6b";
+                loginStatus.textContent =
+                    error?.message || "Login failed. Please try again.";
+            }
+        };
+
+        document.getElementById("loginButton")?.addEventListener(
+            "click",
+            window.__ownerLogin
+        );
+    </script>
+
+    <script src="owner.js?v=20260923-3"></script>
 </body>
 
 </html>
