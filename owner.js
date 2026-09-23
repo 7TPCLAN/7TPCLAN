@@ -307,6 +307,9 @@ const filesList = document.getElementById("filesList");
 const filesPathLabel = document.getElementById("filesPath");
 const filesBackButton = document.getElementById("filesBackButton");
 const filesRefreshButton = document.getElementById("filesRefreshButton");
+const filesUploadButton = document.getElementById("filesUploadButton");
+const filesReplaceButton = document.getElementById("filesReplaceButton");
+const filesUploadInput = document.getElementById("filesUploadInput");
 const fileCount = document.getElementById("fileCount");
 
 const dashboardTopbar = document.getElementById("dashboardTopbar");
@@ -517,6 +520,253 @@ function escapeHtml(value) {
         .replaceAll("'", "&#039;");
 }
 
+async function githubFileMutation(file, replaceMode = false) {
+    if (!file) return;
+
+    const name = file.name.trim();
+
+    if (!name || name.includes("/") || name.includes("\\")) {
+        throw new Error("Choose a file name without folder separators.");
+    }
+
+    if (name.startsWith(".github")) {
+        throw new Error("Files inside .github cannot be changed from Owner Panel.");
+    }
+
+    const path = currentFilesPath
+        ? `${currentFilesPath}/${name}`
+        : name;
+
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    if (!session?.access_token) {
+        throw new Error("Your Owner Panel session has expired. Please log in again.");
+    }
+
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    let binary = "";
+    const chunkSize = 0x8000;
+
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+        binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+    }
+
+    const encodedContent = btoa(binary);
+
+    let sha = "";
+
+    if (replaceMode) {
+        const encodedPath = path.split("/").map(encodeURIComponent).join("/");
+        const existing = await fetch(
+            `${GITHUB_API}/repos/${GITHUB_REPO}/contents/${encodedPath}?ref=${GITHUB_BRANCH}`,
+            { headers: { "Accept": "application/vnd.github+json" } }
+        );
+
+        if (!existing.ok) {
+            throw new Error(existing.status === 404
+                ? "That file does not exist in this folder."
+                : `Could not find the existing file (HTTP ${existing.status}).`);
+        }
+
+        const existingData = await existing.json();
+
+        if (existingData.type !== "file" || !existingData.sha) {
+            throw new Error("The selected path is not an existing file.");
+        }
+
+        sha = existingData.sha;
+    } else {
+        const encodedPath = path.split("/").map(encodeURIComponent).join("/");
+        const existing = await fetch(
+            `${GITHUB_API}/repos/${GITHUB_REPO}/contents/${encodedPath}?ref=${GITHUB_BRANCH}`,
+            { headers: { "Accept": "application/vnd.github+json" } }
+        );
+
+        if (existing.ok) {
+            throw new Error("A file with that name already exists. Use Replace File instead.");
+        }
+    }
+
+    const action = replaceMode ? "Replace" : "Upload";
+    const defaultMessage = `${action} ${path}`;
+    const message = window.prompt("Commit message:", defaultMessage);
+
+    if (!message?.trim()) return;
+
+    const response = await fetch(
+        `${SUPABASE_URL}/functions/v1/github-save`,
+        {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${session.access_token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                path,
+                content: encodedContent,
+                encoding: "base64",
+                message: message.trim(),
+                sha,
+                mode: replaceMode ? "replace" : "create"
+            })
+        }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        throw new Error(result.error || `Upload failed (HTTP ${response.status})`);
+    }
+
+    return result;
+}
+
+async function chooseAndUpload(replaceMode = false) {
+    if (!filesUploadInput) return;
+
+    filesUploadInput.value = "";
+    filesUploadInput.accept = "";
+
+    if (replaceMode) {
+        const path = window.prompt(
+            "Enter the existing repository file path to replace:",
+            currentFilesPath ? `${currentFilesPath}/` : ""
+        );
+
+        if (!path?.trim()) return;
+
+        const cleanPath = path.trim().replace(/^\\/+|\\/+$/g, "");
+        const existing = await fetch(
+            `${GITHUB_API}/repos/${GITHUB_REPO}/contents/${cleanPath.split("/").map(encodeURIComponent).join("/")}?ref=${GITHUB_BRANCH}`,
+            { headers: { "Accept": "application/vnd.github+json" } }
+        );
+
+        if (!existing.ok) {
+            throw new Error(existing.status === 404
+                ? "That repository file was not found."
+                : `Could not find the repository file (HTTP ${existing.status}).`);
+        }
+
+        const existingData = await existing.json();
+
+        if (existingData.type !== "file") {
+            throw new Error("That path is a folder, not a file.");
+        }
+
+        filesUploadInput.dataset.replacePath = cleanPath;
+    } else {
+        filesUploadInput.dataset.replacePath = "";
+    }
+
+    filesUploadInput.click();
+}
+
+if (filesUploadInput) {
+    filesUploadInput.addEventListener("change", async () => {
+        const file = filesUploadInput.files?.[0];
+        if (!file) return;
+
+        const replacePath = filesUploadInput.dataset.replacePath || "";
+        const replaceMode = Boolean(replacePath);
+
+        if (replaceMode) {
+            const originalName = file.name;
+            const targetName = replacePath.split("/").pop();
+
+            if (originalName !== targetName) {
+                const proceed = window.confirm(
+                    `You selected "${originalName}" but the target file is "${targetName}". Replace it with the selected file anyway?`
+                );
+                if (!proceed) return;
+            }
+        }
+
+        if (filesUploadButton) filesUploadButton.disabled = true;
+        if (filesReplaceButton) filesReplaceButton.disabled = true;
+
+        try {
+            let result;
+
+            if (replaceMode) {
+                // Send the target path selected by the owner.
+                const targetPath = replacePath;
+                const bytes = new Uint8Array(await file.arrayBuffer());
+                let binary = "";
+                const chunkSize = 0x8000;
+                for (let i = 0; i < bytes.length; i += chunkSize) {
+                    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+                }
+
+                const encodedContent = btoa(binary);
+                const { data: { session } } = await supabaseClient.auth.getSession();
+
+                if (!session?.access_token) {
+                    throw new Error("Your Owner Panel session has expired. Please log in again.");
+                }
+
+                const existing = await fetch(
+                    `${GITHUB_API}/repos/${GITHUB_REPO}/contents/${targetPath.split("/").map(encodeURIComponent).join("/")}?ref=${GITHUB_BRANCH}`,
+                    { headers: { "Accept": "application/vnd.github+json" } }
+                );
+                const existingData = await existing.json();
+                if (!existing.ok || !existingData.sha) {
+                    throw new Error("Could not get the current file version for replacement.");
+                }
+
+                const message = window.prompt("Commit message:", `Replace ${targetPath}`);
+                if (!message?.trim()) return;
+
+                const response = await fetch(
+                    `${SUPABASE_URL}/functions/v1/github-save`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${session.access_token}`,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            path: targetPath,
+                            content: encodedContent,
+                            encoding: "base64",
+                            message: message.trim(),
+                            sha: existingData.sha,
+                            mode: "replace"
+                        })
+                    }
+                );
+
+                result = await response.json();
+                if (!response.ok) throw new Error(result.error || "Replace failed.");
+            } else {
+                result = await githubFileMutation(file, false);
+            }
+
+            alert(`${replaceMode ? "File replaced" : "File uploaded"} successfully!\n\nCommit: ${result.commit || "created"}`);
+            await loadGithubFiles(currentFilesPath);
+        } catch (error) {
+            console.error("GitHub file upload/replace error:", error);
+            alert(`Could not ${replaceMode ? "replace" : "upload"} file:\n\n${error.message}`);
+        } finally {
+            if (filesUploadButton) filesUploadButton.disabled = false;
+            if (filesReplaceButton) filesReplaceButton.disabled = false;
+            filesUploadInput.dataset.replacePath = "";
+            filesUploadInput.value = "";
+        }
+    });
+}
+
+if (filesUploadButton) {
+    filesUploadButton.addEventListener("click", () => {
+        chooseAndUpload(false).catch(error => alert(`Could not start upload:\n\n${error.message}`));
+    });
+}
+
+if (filesReplaceButton) {
+    filesReplaceButton.addEventListener("click", () => {
+        chooseAndUpload(true).catch(error => alert(`Could not start replacement:\n\n${error.message}`));
+    });
+}
+
 if (filesRefreshButton) {
     filesRefreshButton.addEventListener("click", () => {
         loadGithubFiles(currentFilesPath);
@@ -654,7 +904,7 @@ async function openGithubFile(path) {
 
         if (editorStatus) {
             editorStatus.textContent =
-                "File loaded. Saving will be connected securely next.";
+                "File loaded. Changes can be saved securely to GitHub.";
         }
 
     } catch (error) {
