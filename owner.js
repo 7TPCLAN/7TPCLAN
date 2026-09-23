@@ -218,8 +218,7 @@ async function loginOwner() {
 
     if (
         profile.username.toLowerCase()
-            !== username.toLowerCase()
-        ||
+            !== username.toLowerCase() ||
         profile.role !== "owner"
     ) {
 
