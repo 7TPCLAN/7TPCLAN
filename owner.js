@@ -634,7 +634,7 @@ async function chooseAndUpload(replaceMode = false) {
 
         if (!path?.trim()) return;
 
-        const cleanPath = path.trim().replace(/^\\/+|\\/+$/g, "");
+        const cleanPath = path.trim().replace(/^\/+|\/+$/g, "");
         const existing = await fetch(
             `${GITHUB_API}/repos/${GITHUB_REPO}/contents/${cleanPath.split("/").map(encodeURIComponent).join("/")}?ref=${GITHUB_BRANCH}`,
             { headers: { "Accept": "application/vnd.github+json" } }
