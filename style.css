@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 /* 7TPCLAN PUBLIC THEME — replacement */
 700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
 
@@ -28,9 +29,9 @@ footer{width:min(calc(100% - 48px),var(--max));margin:auto;padding:35px 0 28px;b
 
 
 
+
 /* GLOBAL MINECRAFT FONT + PURPLE THEME */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-body,button,input,textarea,select{font-family:"Press Start 2P",monospace;color:#fff}
-body{background:radial-gradient(circle at 50% -15%,#7e22ce2b,transparent 48%),#07070b;color:#fff}
-p,.card p,.panel p,.inside p,.section-lead,.member-info p:last-child,.requirement p,.hero-box small,.hero-box small,.panel div{color:#fff}
-nav a,.member-info p,.hero-box small,footer{color:#fff}
+body,body *,button,input,textarea,select{font-family:"Press Start 2P",monospace !important;color:#fff}
+body{background:radial-gradient(circle at 50% -15%,#7e22ce2b,transparent 48%),#07070b !important;color:#fff !important}
+p,.card p,.panel p,.inside p,.section-lead,.member-info p:last-child,.requirement p,.hero-box small,.panel div,nav a,footer{color:#fff !important}
+h1,h2,h3,.logo,.eyebrow,.btn,.panel small,.member-role,.host-role,.weapon-type,.link{font-family:"Press Start 2P",monospace !important}
