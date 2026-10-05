@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 /* 7TPCLAN PUBLIC THEME — replacement */
 700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
 
@@ -26,6 +27,6 @@ footer{width:min(calc(100% - 48px),var(--max));margin:auto;padding:35px 0 28px;b
 @media(max-width:650px){header{height:auto;min-height:72px;padding:12px 18px}nav{gap:2px;justify-content:flex-end}nav a{font-size:10px;padding:7px}.hero,.page,.player-page,.loadout-page,.clan-members,.tryout-section{width:min(calc(100% - 30px),var(--max))}.hero{padding:55px 0}.hero h1{font-size:3.5rem}.hero-box strong{font-size:5rem}.cards,.grid,.member-grid,.host-grid,.tryout-requirements,.vip-server-grid,.loadout-grid{grid-template-columns:1fr}.buttons{flex-direction:column}.btn{text-align:center}.player-header{grid-template-columns:1fr;text-align:center;justify-items:center}.player-header-image{width:160px}.member-photo{height:300px}.page{padding-top:60px}}
 
 
+
 /* GLOBAL MINECRAFT FONT */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 body,button,input,textarea,select{font-family:"Press Start 2P",monospace}
