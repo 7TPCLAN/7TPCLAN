@@ -24,3 +24,14 @@ footer{width:min(calc(100% - 48px),var(--max));margin:auto;padding:35px 0 28px;b
 .page{padding:90px 0;min-height:650px}.page h1{font-size:clamp(2.8rem,6vw,5rem)}
 @media(max-width:900px){.hero{grid-template-columns:1fr;min-height:auto}.cards,.grid,.member-grid{grid-template-columns:repeat(2,1fr)}.host-grid{grid-template-columns:1fr 1fr}.hero-box{height:300px}.player-header{grid-template-columns:160px 1fr}}
 @media(max-width:650px){header{height:auto;min-height:72px;padding:12px 18px}nav{gap:2px;justify-content:flex-end}nav a{font-size:10px;padding:7px}.hero,.page,.player-page,.loadout-page,.clan-members,.tryout-section{width:min(calc(100% - 30px),var(--max))}.hero{padding:55px 0}.hero h1{font-size:3.5rem}.hero-box strong{font-size:5rem}.cards,.grid,.member-grid,.host-grid,.tryout-requirements,.vip-server-grid,.loadout-grid{grid-template-columns:1fr}.buttons{flex-direction:column}.btn{text-align:center}.player-header{grid-template-columns:1fr;text-align:center;justify-items:center}.player-header-image{width:160px}.member-photo{height:300px}.page{padding-top:60px}}
+
+
+/* MINECRAFT PIXEL FONT */
+/* Minecraft-style display treatment for Minecraft pages and Minecraft labels */
+.minecraft-page h1,.minecraft-page h2,.minecraft-page h3,.minecraft-page .eyebrow,.minecraft-page .btn,
+.minecraft-page .panel small,.minecraft-page .tip b,
+body.minecraft-page .logo,body.minecraft-page nav a{font-family:"Courier New",monospace;font-weight:900;letter-spacing:.02em;text-transform:uppercase}
+.minecraft-page h1,.minecraft-page h2{letter-spacing:.01em;text-shadow:3px 3px 0 #000}
+.minecraft-page .panel,.minecraft-page .tip{border-radius:2px;box-shadow:4px 4px 0 #0008}
+.minecraft-page .btn{border-radius:2px;box-shadow:4px 4px 0 #0008}
+.minecraft-page .btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 #0008}
