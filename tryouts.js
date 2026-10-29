@@ -14,7 +14,19 @@ async function loadPublicServers() {
 
   if (error) {
     console.error(error);
-    updateTryoutStatus([]);
+    const panel = document.getElementById("tryoutStatus");
+    if (panel) {
+      panel.dataset.status = "unknown";
+      panel.innerHTML = `
+        <span class="tryout-status-dot" aria-hidden="true"></span>
+        <div>
+          <p class="eyebrow">CURRENT STATUS</p>
+          <h2>STATUS UNAVAILABLE</h2>
+          <p>We couldn't load live server information right now.</p>
+          <p>Please try again in a moment.</p>
+        </div>
+      `;
+    }
     grid.innerHTML = `
       <article class="vip-server-card">
         <div class="vip-server-status ended">⚠️ UNABLE TO LOAD SERVERS</div>
