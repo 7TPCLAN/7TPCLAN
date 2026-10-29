@@ -8,6 +8,16 @@ document.querySelectorAll('#year').forEach(x=>x.textContent=new Date().getFullYe
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let dismissed = false;
 
+  try {
+    if (sessionStorage.getItem("7tpIntroSeen") === "1") {
+      overlay.remove();
+      return;
+    }
+    sessionStorage.setItem("7tpIntroSeen", "1");
+  } catch {
+    // If storage is blocked, the intro still works normally.
+  }
+
   function dismissIntro() {
     if (dismissed) return;
     dismissed = true;
