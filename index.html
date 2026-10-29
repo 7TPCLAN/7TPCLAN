@@ -5,6 +5,16 @@
 <title>7TPclan</title><link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="intro-overlay" id="introOverlay" aria-label="7TPclan intro" role="dialog" aria-modal="true">
+  <div class="intro-grid" aria-hidden="true"></div>
+  <div class="intro-content">
+    <p class="intro-eyebrow">WELCOME TO</p>
+    <div class="intro-logo">7TP <span>CLAN</span></div>
+    <p class="intro-tagline">PLAY SMART. PLAY TOGETHER.</p>
+    <button class="intro-skip" id="skipIntro" type="button">Skip intro <span aria-hidden="true">→</span></button>
+  </div>
+  <div class="intro-progress" aria-hidden="true"><span></span></div>
+</div>
 <header><a class="logo" href="index.html">7TP <span>CLAN</span></a>
 <nav>
 <a class="active" href="index.html">Home</a>
@@ -20,6 +30,14 @@
 <p class="lead">Welcome to my gaming hub. Find my Rivals settings, Minecraft PvP guides and latest videos.</p>
 <div class="buttons"><a class="btn" href="rivals.html">View Rivals Settings</a><a class="btn ghost" href="videos.html">Watch My Videos</a></div>
 </div><div class="hero-box"><b>7TPclan</b><strong>+</strong><small>RIVALS • MINECRAFT • MORE</small></div></main>
+<section class="latest-update" aria-labelledby="latestUpdateTitle">
+  <div class="latest-update-copy">
+    <p class="eyebrow">SITE NEWS · OCTOBER 2026</p>
+    <h2 id="latestUpdateTitle">The site is getting a <span>fresh update.</span></h2>
+    <p>We’re polishing mobile navigation, checking links, improving tryout status visibility and adding a new 7TP intro experience.</p>
+  </div>
+  <span class="update-label">CURRENT RELEASE</span>
+</section>
 <section class="cards">
 <a class="card" href="rivals.html"><i>🎯</i><h2>Rivals</h2><p>My sensitivity, keybinds and performance settings.</p></a>
 <a class="card" href="minecraft.html"><i>⚔️</i><h2>Minecraft PvP</h2><p>Guides from beginner movement to advanced PvP.</p></a>
