@@ -14,6 +14,7 @@ async function loadPublicServers() {
 
   if (error) {
     console.error(error);
+    updateTryoutStatus([]);
     grid.innerHTML = `
       <article class="vip-server-card">
         <div class="vip-server-status ended">⚠️ UNABLE TO LOAD SERVERS</div>
@@ -27,6 +28,7 @@ async function loadPublicServers() {
   grid.innerHTML = "";
 
   if (!data || data.length === 0) {
+    updateTryoutStatus([]);
     grid.innerHTML = `
       <article class="vip-server-card">
         <div class="vip-server-status ended">🔴 NO ACTIVE SERVERS</div>
@@ -36,6 +38,8 @@ async function loadPublicServers() {
     `;
     return;
   }
+
+  updateTryoutStatus(data);
 
   data.forEach(server => {
     const card = document.createElement("article");
@@ -59,18 +63,45 @@ async function loadPublicServers() {
         <div class="vip-server-status">🟢 SERVER AVAILABLE</div>
         <h3>${escapeHTML(server.name)}</h3>
         <p>Waiting for a tryout to start.</p>
+        <p class="server-host">Host: ${escapeHTML(server.hosted_by || "Not assigned")}</p>
       `;
     } else {
       card.innerHTML = `
         <div class="vip-server-status ended">🔴 UNAVAILABLE</div>
         <h3>${escapeHTML(server.name)}</h3>
         <p>This server is currently unavailable.</p>
+        <p class="server-host">Host: ${escapeHTML(server.hosted_by || "Not assigned")}</p>
         <span class="server-disabled">Server Unavailable</span>
       `;
     }
 
     grid.appendChild(card);
   });
+}
+
+function updateTryoutStatus(servers) {
+  const panel = document.getElementById("tryoutStatus");
+  if (!panel) return;
+
+  const active = servers.some(server => server.available && server.active && safeURL(server.link) !== "#");
+  const open = servers.some(server => server.available && safeURL(server.link) !== "#");
+  const status = active ? "running" : open ? "open" : "closed";
+  const copy = {
+    running: ["TRYOUTS RUNNING", "At least one tryout is currently active.", "Join an active server below if you are ready to try out."],
+    open: ["TRYOUTS OPEN", "A tryout server is available.", "Check the server list below for current host details."],
+    closed: ["TRYOUTS CLOSED", "No tryout servers are currently available.", "Check back later for the next hosted session."]
+  }[status];
+
+  panel.dataset.status = status;
+  panel.innerHTML = `
+    <span class="tryout-status-dot" aria-hidden="true"></span>
+    <div>
+      <p class="eyebrow">CURRENT STATUS</p>
+      <h2>${copy[0]}</h2>
+      <p>${copy[1]}</p>
+      <p>${copy[2]}</p>
+    </div>
+  `;
 }
 
 function escapeHTML(value) {
