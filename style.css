@@ -1132,3 +1132,37 @@ button:focus-visible {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+
+/* =========================
+   GAME GUIDES EXPANSION
+========================= */
+.guide-hero { max-width:1100px; margin:0 auto 34px; padding:34px; border:1px solid #7c5cff44; border-radius:20px; background:linear-gradient(130deg,#17152a,#0d1019 65%); }
+.guide-hero h1 { margin:8px 0 14px; font-size:clamp(2.4rem,6vw,4.8rem); line-height:1; letter-spacing:-.055em; }
+.guide-hero p { max-width:720px; color:#aab2c3; }
+.guide-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; max-width:1100px; margin:30px auto; }
+.guide-card { display:block; overflow:hidden; padding:0; background:#0e1119; border:1px solid #ffffff16; border-radius:18px; transition:transform .2s,border-color .2s; }
+.guide-card:hover { transform:translateY(-5px); border-color:#7c5cff88; }
+.guide-card-art { min-height:155px; display:flex; align-items:flex-end; padding:22px; background:radial-gradient(circle at 80% 15%,#7c5cff66,transparent 38%),linear-gradient(135deg,#1a2140,#10131d); }
+.guide-card-art.egg { background:radial-gradient(circle at 80% 15%,#26d9ff55,transparent 38%),linear-gradient(135deg,#18384a,#10131d); }
+.guide-card-art b { font-size:1.8rem; letter-spacing:-.04em; }
+.guide-card-copy { padding:22px; }
+.guide-card-copy p { color:#9ca4b5; }
+.guide-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+.guide-tags span { padding:5px 9px; border:1px solid #ffffff18; border-radius:999px; color:#cbd1df; font-size:.75rem; }
+.guide-section { max-width:1100px; margin:38px auto; }
+.guide-section h2 { font-size:clamp(1.6rem,4vw,2.4rem); margin:0 0 16px; }
+.guide-section h2 span { color:#7c5cff; }
+.guide-columns { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.guide-panel { padding:22px; background:#0e1119; border:1px solid #ffffff14; border-radius:16px; }
+.guide-panel h3 { margin:0 0 8px; }
+.guide-panel p,.guide-panel li { color:#aab2c3; }
+.guide-panel ul { padding-left:20px; }
+.guide-note { margin:20px 0; padding:18px 20px; border-left:3px solid #26d9ff; background:#26d9ff0c; border-radius:0 12px 12px 0; color:#cbd1df; }
+.fruit-table { width:100%; border-collapse:collapse; background:#0e1119; border:1px solid #ffffff16; border-radius:14px; overflow:hidden; }
+.fruit-table th,.fruit-table td { padding:14px 16px; text-align:left; border-bottom:1px solid #ffffff12; }
+.fruit-table th { color:#26d9ff; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; }
+.fruit-table td { color:#cbd1df; }
+.fruit-table tr:last-child td { border-bottom:0; }
+.guide-disclaimer { color:#8992a5; font-size:.88rem; }
+@media(max-width:700px){.guide-grid,.guide-columns{grid-template-columns:1fr}.guide-hero{padding:24px}.fruit-table{display:block;overflow-x:auto;white-space:nowrap}}
